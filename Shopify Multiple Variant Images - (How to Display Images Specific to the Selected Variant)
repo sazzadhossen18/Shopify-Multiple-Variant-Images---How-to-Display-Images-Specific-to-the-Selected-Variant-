@@ -1,0 +1,88 @@
+
+
+Llink:https://www.youtube.com/watch?v=L83SG32LWHc&t=14s
+
+
+
+
+
+
+
+{% if product.selected_or_first_available_variant.featured_media.alt != media.alt and product.selected_or_first_available_variant.featured_media.alt != blank %}
+style="display: none;"
+{% endif %}
+thumbnail-alt='{{ media.alt }}' 
+
+D:
+
+filterImgVariant() {
+  if(this.currentVariant.featured_media && this.currentVariant.featured_media.alt) {
+      document.querySelectorAll('[thumbnail-alt]').forEach(img => img.style.display = 'none')
+      const currentImgAlt = this.currentVariant.featured_media.alt
+      const thumbnailSelector = `[thumbnail-alt = '${currentImgAlt}']`
+      document.querySelectorAll(thumbnailSelector).forEach(img => img.style.display = 'block')
+  } else {
+      document.querySelectorAll('[thumbnail-alt]').forEach(img => img.style.display = 'block')
+  }
+} 
+
+
+
+
+
+
+<script>
+   var product = {{ product | json }}
+  
+  document.querySelectorAll('input[type="radio"]').forEach( radio =>{
+  radio.addEventListener("change", () => {
+
+     //Selected Option
+    var selectedOptions = [];
+    document.querySelectorAll('input[type="radio"]:checked').forEach( radio =>{
+        selectedOptions.push(radio.value)
+    })
+
+
+     //Finding Matched Variant
+    var matchedVariant = product.variants.find(variant => {
+      var pass = true;
+      for(var i=0; i<selectedOptions.length; i++){
+        if(selectedOptions.indexOf(variant.options[i]) == -1){
+          pass = false
+          break
+        }
+      }
+      return pass
+    })
+
+
+  
+
+if(matchedVariant.featured_media && matchedVariant.featured_media.alt) {
+      document.querySelectorAll('[thumbnail-alt]').forEach(img => img.style.display = 'none')
+      const currentImgAlt = matchedVariant.featured_media.alt
+      const thumbnailSelector = `[thumbnail-alt = '${currentImgAlt}']`
+      document.querySelectorAll(thumbnailSelector).forEach(img => img.style.display = 'inline-block')
+  } else {
+      document.querySelectorAll('[thumbnail-alt]').forEach(img => img.style.display = 'inline-block')
+  }
+
+
+
+  
+    
+ 
+    
+
+
+  
+    
+   });
+    
+  });
+</script>
+
+
+
+
